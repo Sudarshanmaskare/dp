@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxHeight(vector<vector<int>>& cub) {
+        for(auto &var:cub) sort(var.begin(),var.end());
+        cub.push_back({0,0,0});
+        sort(cub.begin(),cub.end());
+        int res=1;
+        
+        int n=cub.size();
+        vector<int> dp(n,0);
+        
+        for(int i=1;i<n;i++){
+            for(int j=0;j<i;j++){
+                if(cub[i][0]>=cub[j][0] && cub[i][1]>=cub[j][1] && cub[i][2]>=cub[j][2]){
+                    dp[i]=max(dp[i],dp[j]+cub[i][2]);
+                    res=max(res,dp[i]);
+                }
+            }
+        }
+        return res;
+    }
+};
