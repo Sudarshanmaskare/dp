@@ -30,3 +30,67 @@ public:
         
     }
 };
+
+
+
+-----------Maximal Rectangle-----
+class Solution {
+public:
+    int maximalRectangle(vector<vector<char>>& matrix) {
+        int n=matrix.size(),m=matrix[0].size();
+        vector<vector<int>> rect(n,vector<int>(m));
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                rect[i][j]=matrix[i][j]-'0';
+        }
+        }
+        
+        int res=0;
+        
+        for(int i=0;i<n;i++){
+            for(int j=0;j<m;j++){
+                if(i>0 && rect[i][j]!=0){
+                    rect[i][j]+=rect[i-1][j];
+                }
+            }
+            
+            stack<int> stk;
+            vector<int> left(m,0);
+            for(int k=0;k<m;k++){
+                while(!stk.empty() && rect[i][stk.top()]>=rect[i][k]){
+                    stk.pop();
+                }
+                
+                if(stk.empty()){
+                    left[k]=0;
+                }
+                else{
+                    left[k]=stk.top()+1;
+                }
+                stk.push(k);
+            }
+            
+            while(!stk.empty()) stk.pop();
+             vector<int> right(m,0);
+            for(int k=m-1;k>=0;k--){
+                while(!stk.empty() && rect[i][stk.top()]>=rect[i][k]){
+                    stk.pop();
+                }
+                
+                if(stk.empty()){
+                    right[k]=m-1;
+                }
+                else{
+                    right[k]=stk.top()-1;
+                }
+                stk.push(k);
+            }
+            
+            for(int k=0;k<m;k++){
+                res=max(res,rect[i][k]*(right[k]-left[k]+1));
+            }
+            
+        }
+        return res;
+    }
+};
