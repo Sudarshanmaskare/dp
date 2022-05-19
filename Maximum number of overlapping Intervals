@@ -1,0 +1,23 @@
+ int overlap(vector<pair<int,int>>intervals, int n){
+        //Write your code here
+        vector<pair<int,char>> dp;
+        for(auto var:intervals){
+            dp.push_back({var.first,'x'});
+            dp.push_back({var.second,'y'});
+        }
+        
+        sort(dp.begin(),dp.end());
+        int res=0;
+        int count=0;
+        for(int i=0;i<dp.size();i++){
+            if(dp[i].second=='x'){
+                res++;
+            }
+            if(dp[i].second=='y'){
+                res--;
+            }
+            count=max(count,res);
+        }
+        return count;
+    }
+    
