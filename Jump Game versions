@@ -1,0 +1,225 @@
+--------------------Jump Game 1----------------------------
+ bool canJump(vector<int>& nums) {
+        int n=nums.size();
+        int last=n-1;
+        for(int i=n-2;i>=0;i--){
+           if(nums[i]+i>=last){
+               last=i;
+           }
+            
+        }
+        return last==0;
+    }
+    
+----------------jump game 2;-------------------------------
+
+class Solution {
+public:
+    int jump(vector<int>& nums) {
+        int n=nums.size();
+        int cur=0,far=0,steps=0;
+        
+        for(int i=0;i<n-1;i++){
+            far=max(far,nums[i]+i);
+            if(cur==i){
+                cur=far;
+                steps++;
+            }
+            if(cur>=n-1) return steps;
+        }
+        if(cur<n-1) return -1;
+        return steps;
+    }
+};
+
+
+-------------------------jump game 3--------------------------
+
+Given an array of non-negative integers arr, you are initially positioned at start index of the array. When you are at index i, 
+\you can jump to i + arr[i] or i - arr[i], check if you can reach to any index with value 0.
+
+Notice that you can not jump outside of the array at any time.
+
+class Solution {
+public:
+##dfs
+    bool cal(vector<int> &arr,int start,int n,vector<bool> &vis){
+        if(start<0 || start>=n || vis[start]) return false;
+        if(arr[start]==0) return true;
+        vis[start]=true;
+        return cal(arr,start+arr[start],n,vis) || cal(arr,start-arr[start],n,vis);
+    }
+###bfs
+    bool canReach(vector<int>& arr, int start) {
+        int n=arr.size();
+        
+        vector<bool> vis(n,false);
+        
+        queue<int> q;
+        q.push(start);
+        
+        while(!q.empty()){
+            auto temp=q.front();
+            q.pop();
+            
+            vis[temp]=true;
+            if(arr[temp]==0){
+                return true;
+            }
+            
+            if(temp+arr[temp]<n && !vis[temp+arr[temp]]) q.push(temp+arr[temp]);
+            if(temp-arr[temp]>=0 && !vis[temp-arr[temp]]) q.push(temp-arr[temp]);
+        }
+        return false;
+    }
+};
+
+
+------------------------jump game 4--------------------------------
+Given an array of integers arr, you are initially positioned at the first index of the array.
+
+In one step you can jump from index i to index:
+
+i + 1 where: i + 1 < arr.length.
+i - 1 where: i - 1 >= 0.
+j where: arr[i] == arr[j] and i != j.
+Return the minimum number of steps to reach the last index of the array.
+
+Notice that you can not jump outside of the array at any time.
+
+class Solution {
+public:
+    int minJumps(vector<int>& arr) {
+        int n=arr.size();
+        
+        unordered_map<int,vector<int>> mp;
+        
+        for(int i=0;i<n;i++) mp[arr[i]].push_back(i);
+        vector<bool> vis(n,false);
+        queue<int> q;
+        
+        vis[0]=true;
+        q.push(0);
+        int steps=0;
+        while(q.size()){
+            int sz=q.size();
+            while(sz--){
+                auto temp=q.front();
+                q.pop();
+                if(temp==n-1) return steps;
+                
+                vector<int> &cal=mp[arr[temp]];
+                cal.push_back(temp+1);
+                cal.push_back(temp-1);
+                
+                for(auto var:cal){
+                    if(var>=0 && var<n && !vis[var]){
+                        vis[var]=true;
+                        q.push(var);
+                    }
+                }
+                cal.clear();
+            }
+            steps++;
+        }
+        return -1;
+        
+    }
+};
+
+----------------------------Jump Game V----------------
+Given an array of integers arr and an integer d. In one step you can jump from index i to index:
+
+i + x where: i + x < arr.length and 0 < x <= d.
+i - x where: i - x >= 0 and 0 < x <= d.
+In addition, you can only jump from index i to index j if arr[i] > arr[j] and arr[i] > arr[k] for all indices k between i and j (More formally min(i, j) < k < max(i, j)).
+
+You can choose any index of the array and start jumping. Return the maximum number of indices you can visit.
+
+Notice that you can not jump outside of the array at any time.
+
+
+class Solution {
+public:
+    vector<int> dp;
+    int maxJumps(vector<int>& arr, int d) {
+       int n=arr.size();
+        dp.resize(n,0);
+        int res=1;
+        for(int i=0;i<n;i++){
+            res=max(res,dfs(arr,n,i,d));
+        }
+        return res;
+    }
+    int dfs(vector<int> &arr,int n,int i,int d){
+        if(dp[i]) return dp[i];
+        
+        int res=1;
+        for(int j=i+1;j<=min(n-1,i+d) && arr[i]>arr[j];j++){
+            res=max(res,1+dfs(arr,n,j,d));
+        }
+        for(int j=i-1;j>=max(0,i-d) && arr[i]>arr[j];j--){
+            res=max(res,1+dfs(arr,n,j,d));
+        }
+        return dp[i]=res;
+    }
+};
+
+
+--------------------------------jump Game 6--------------------
+
+You are given a 0-indexed integer array nums and an integer k.
+
+You are initially standing at index 0. In one move, you can jump at most k steps forward without going outside the
+boundaries of the array. That is, you can jump from index i to any index in the range [i + 1, min(n - 1, i + k)] inclusive.
+
+You want to reach the last index of the array (index n - 1). Your score is the sum of all nums[j] for each index j you visited in the array.
+
+Return the maximum score you can get.
+
+int maxResult(vector<int>& nums, int k) {
+        int n=nums.size();
+        priority_queue<pair<int,int>> pq;
+        pq.push({nums[0],0});
+        int maxi=nums[0];
+        
+        for(int i=1;i<n;i++){
+            while(!(i-pq.top().second<=k)) pq.pop();
+            maxi=nums[i]+pq.top().first;
+            pq.push({maxi,i});
+        }
+        return maxi;
+    }
+----------------------------------jump game 7----------------------------------------
+You are given a 0-indexed binary string s and two integers minJump and maxJump.
+In the beginning, you are standing at index 0, which is equal to '0'. You can move from index i to index j if the following conditions are fulfilled:
+
+i + minJump <= j <= min(i + maxJump, s.length - 1), and
+s[j] == '0'.
+Return true if you can reach index s.length - 1 in s, or false otherwise.
+
+  bool canReach(string s, int minJump, int maxJump) {
+        int n=s.size();
+        if(s[0]=='1') return false;
+        
+        vector<bool> vis(n,false);
+        queue<int> q;
+        q.push(0);
+        vis[0]=true;
+        int cur_max=0;
+        while(!q.empty()){
+            auto temp=q.front();
+            q.pop();
+            if(temp==n-1) return true;
+            for(int i=max(cur_max,temp+minJump);i<=min(n-1,temp+maxJump);i++){
+                if(!vis[i] && s[i]=='0'){
+                    vis[i]=true;
+                    q.push(i);
+                }
+            }
+            cur_max=min(temp+maxJump+1,n);
+        }
+        return false;
+    }
+
+
