@@ -1,0 +1,52 @@
+class Solution {
+public:
+    int cal(vector<int> &values,int i,int j){
+        
+        int ans=INT_MAX;
+        for(int k=i+1;k<j;k++){
+            int temp=values[i]*values[k]*values[j]+cal(values,i,k)+cal(values,k,j);
+            ans=min(ans,temp);
+        }
+        if(ans==INT_MAX) return 0;
+        return ans;
+    }
+    int minScoreTriangulation(vector<int>& values) {
+        int n=values.size();
+        // return cal(values,0,n-1);
+        vector<vector<int>> dp(n,vector<int>(n));
+        
+    }
+};
+
+
+class Solution {
+public:
+    int minScoreTriangulation(vector<int>& values) {
+        int n=values.size();
+        vector<vector<int>> dp(n,vector<int>(n));
+        
+        for(int g=0;g<n;g++){
+            for(int i=0,j=g;j<n;j++,i++){
+                if(g==0){
+                    dp[i][j]=0;
+                }
+                else if(g==1){
+                    dp[i][j]=0;
+                }
+                else if(g==2){
+                    dp[i][j]=values[i]*values[i+1]*values[i+2];
+                }
+                else{
+                    int mini=INT_MAX;
+                    for(int k=i+1;k<=j-1;k++){
+                        int now=values[i]*values[j]*values[k];
+                        int total=now+dp[i][k]+dp[k][j];
+                        mini=min(mini,total);
+                    }
+                    dp[i][j]=mini;
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+};
