@@ -1,0 +1,30 @@
+
+1. You are given a number n, representing the number of bridges on a river.
+2. You are given n pair of numbers, representing the north bank and south bank co-ordinates of each bridge.
+3. You are required to print the count of maximum number of non-overlapping bridges.
+
+
+
+int main(){
+    int n;
+    cin>>n;
+    vector<pair<int,int>> arr(n);
+    for(auto &var:arr){
+        cin>>var.first;
+        cin>>var.second;
+    }
+    sort(arr.begin(),arr.end());
+    int ans=1;
+    vector<int> dp;
+    dp.push_back(arr[0].second);
+    for(int i=1;i<n;i++){
+        int ind=lower_bound(dp.begin(),dp.end(),arr[i].second)-dp.begin();
+        if(ind==dp.size()){
+            dp.push_back(arr[i].second);
+        }
+        else{
+            dp[ind]=arr[i].second;
+        }
+    }
+    cout<<dp.size();
+}
