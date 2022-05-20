@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int len;
+    int cal(vector<int>&cuts,int i,int j){
+        if(i>=j) return 0;
+        
+        int left=(i==0)?0:cuts[i-1];
+        int right=(j==cuts.size())?len:cuts[j];
+        int res=INT_MAX;
+        for(int k=i;k<j;k++){
+            res=min(res,right-left+cal(cuts,i,k)+cal(cuts,k+1,j));
+        }
+        return res;
+        
+    }
+    int minCost(int n, vector<int>& cuts) {
+        sort(cuts.begin(),cuts.end());
+        len=n;
+        return cal(cuts,0,cuts.size());
+    }
+};
