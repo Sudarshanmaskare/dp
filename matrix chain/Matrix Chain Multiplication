@@ -1,0 +1,39 @@
+class Solution{
+public:
+int dp[1001][1001];
+     int cal(int arr[],int i,int j){
+         if(i==j) return 0;
+         if(dp[i][j]!=-1) return dp[i][j];
+         int res=INT_MAX;
+         for(int k=i;k<j;k++){
+             res=min(res,cal(arr,i,k)+cal(arr,k+1,j)+arr[i-1]*arr[k]*arr[j]);
+         }
+         return dp[i][j]=res;
+     }
+    int matrixMultiplication(int N, int arr[])
+    {
+        // code here
+        memset(dp,-1,sizeof(dp));
+        return cal(arr,1,N-1);
+         vector<vector<int>> dp(N-1,vector<int>(N-1));
+         
+         for(int g=0;g<N-1;g++){
+             for(int i=0,j=g;j<N-1;j++,i++){
+                 if(g==0){
+                     dp[i][j]=0;
+                 }
+                 else if(g==1){
+                     dp[i][j]=arr[i]*arr[j]*arr[j+1];
+                 }
+                 else{
+                     int res=INT_MAX;
+                     for(int k=i;k<j;k++){
+                         res=min(res,arr[i]*arr[k+1]*arr[j+1]+dp[i][k]+dp[k+1][j]);
+                     }
+                     dp[i][j]=res;
+                 }
+             }
+         }
+         return dp[0][N-2];
+    }
+};
