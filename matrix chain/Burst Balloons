@@ -1,0 +1,43 @@
+class Solution {
+public:
+//     int dp[302][302];
+//     int cal(vector<int> &nums,int i,int j){
+//         if(i<0 || j>=nums.size()) return 0;
+//         int left=1,right=1;
+        
+//         if(i-1>=0){
+//             left=nums[i-1];
+//         }
+//         if(j+1<nums.size()){
+//             right=nums[j+1];
+//         }
+//         if(dp[i][j]!=-1) return dp[i][j];
+        
+//         int res=0;
+        
+//         for(int k=i;k<=j;k++){
+//             res=max(res,cal(nums,i,k-1)+cal(nums,k+1,j)+left*right*nums[k]);
+//         }
+//         return dp[i][j]=res;
+//     }
+    int maxCoins(vector<int>& nums) {
+       int n=nums.size();
+        vector<vector<int>> dp(n,vector<int>(n,0));
+        for(int g=0;g<n;g++){
+            for(int i=0,j=g;j<n;j++,i++){
+               
+                    int res=INT_MIN;
+                    for(int k=i;k<=j;k++){
+                        int left=((i-1>=0)?nums[i-1]:1);
+                        int right=((j+1<n)?nums[j+1]:1);
+                        int left_d=((k==i)?0:dp[i][k-1]);
+                        int right_d=((k==j)?0:dp[k+1][j]);
+                        res=max(res,left*right*nums[k]+left_d+right_d);
+                    }
+                    dp[i][j]=res;
+                
+            }
+        }
+        return dp[0][n-1];
+    }
+};
