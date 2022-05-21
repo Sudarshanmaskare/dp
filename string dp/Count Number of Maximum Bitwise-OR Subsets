@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int countMaxOrSubsets(vector<int>& nums) {
+       int maxi=0,dp[1<<17]={0};
+        dp[0]=1;
+    for(auto var:nums){
+        for(int i=maxi;i>=0;i--){
+            dp[i|var]+=dp[i];
+        }
+        maxi|=var;
+    }
+        return dp[maxi];
+    }
+};
