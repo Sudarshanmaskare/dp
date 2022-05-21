@@ -1,0 +1,40 @@
+ int recursive(string& s) {
+        int count = 0;
+        for(int i = 0; i < s.size(); ++i) {
+            for(int j = i; j < s.size(); ++j) {
+                count += helper(s, i, j);
+            }
+        }
+        return count;
+    }
+    
+    // return 1 if s[i..j] is palindromic, 0 otherwise.
+    int helper(string& s, int i, int j) {
+        if (i >= j) return 1;
+        return s[i] == s[j] ? helper(s, i+1, j-1) : 0;
+    }
+    
+    
+    ###n^2
+    
+    int countSubstrings(string s) {
+        int n=s.size();
+        vector<vector<bool>> dp(n,vector<bool>(n,false));
+        int c=0;
+        for(int g=0;g<n;g++){
+            for(int i=0,j=g;j<n;j++,i++){
+                if(g==0) dp[i][j]=true;
+                else if(g==1){
+                    dp[i][j]=(s[i]==s[j]);
+                }
+                else{
+                    if(s[i]==s[j]){
+                        dp[i][j]=dp[i+1][j-1];
+                    }
+                }
+                if(dp[i][j]) c++;
+                
+            }
+        }
+        return c;
+    }
