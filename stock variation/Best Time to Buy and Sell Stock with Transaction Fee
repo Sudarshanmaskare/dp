@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxProfit(vector<int>& prices, int fee) {
+        int n=prices.size();
+        
+        int obsp=-prices[0],ossp=0;
+        
+        for(int i=1;i<n;i++){
+            int nbsp,nssp;
+            
+            nbsp=max(obsp,ossp-prices[i]);
+            nssp=max(ossp,obsp+prices[i]-fee);
+            obsp=nbsp;
+            ossp=nssp;
+        }
+        return ossp;
+    }
+};
