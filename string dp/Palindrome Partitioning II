@@ -1,0 +1,79 @@
+int minCut(string s) {
+        int n=s.size();
+        
+        vector<vector<bool>> dp(n,vector<bool>(n,false));
+        
+        for(int g=0;g<n;g++){
+            for(int i=0,j=g;j<n;j++,i++){
+                if(g==0){
+                    dp[i][j]=true;
+                }
+                else if(g==1){
+                    if(s[i]==s[j]){
+                        dp[i][j]=true;
+                    }
+                }
+                else{
+                    if(s[i]==s[j] && dp[i+1][j-1]) {
+                        dp[i][j]=true;
+                    }
+                }
+            }
+        }
+        
+        vector<int> cut(n);
+        cut[0]=0;
+        
+        for(int i=1;i<n;i++){
+            if(dp[0][i]){
+                cut[i]=0;
+                continue;
+            }
+            int mini=INT_MAX;
+            for(int j=i;j>=1;j--){
+                if(dp[j][i]){
+                    mini=min(mini,cut[j-1]);
+                }
+            }
+            cut[i]=mini+1;
+        }
+        
+        return cut[n-1];
+    }
+    
+    
+ ///////////////////
+ lass Solution {
+public:
+   vector<vector<int>> pali;
+    vector<int> cut;
+    bool ispali(string &s,int i,int j){
+        if(i>=j) return 1;
+        if(pali[i][j]!=-1) return pali[i][j];
+        
+        if(s[i]!=s[j]) return 0;
+        return pali[i][j]=ispali(s,i+1,j-1);
+    }
+    int cal(string &s,int i){
+        if(i>=s.size()) return 0;
+        
+    if(ispali(s,i,s.size()-1)) return cut[i]=0;
+        if(cut[i]!=-1) return cut[i];
+        
+        int res=INT_MAX;
+        for(int k=i;k<s.size();k++){
+            if(ispali(s,i,k)){
+                res=min(res,1+cal(s,k+1));
+            }
+        }
+        return cut[i]=res;
+    }
+    int minCut(string &s) 
+    {
+        int n=s.size();
+        pali.resize(n+1,vector<int>(n+1,-1));
+        cut.resize(n+1,-1);
+        return cal(s,0);
+        
+    }
+};
