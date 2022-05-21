@@ -1,0 +1,48 @@
+//at most two transaction
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int t1_cost=INT_MAX,t2_cost=INT_MAX;
+        int t1_profit=0,t2_profit=0;
+        
+        for(auto var:prices){
+            t1_cost=min(t1_cost,var);
+            t1_profit=max(t1_profit,var-t1_cost);
+            t2_cost=min(t2_cost,var-t1_profit);
+            t2_profit=max(t2_profit,var-t2_cost);
+        }
+        return t2_profit;
+    }
+};
+
+
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+       int n=prices.size();
+        vector<int> left(n);
+        left[0]=0;
+        int pre=prices[0];
+        for(int i=1;i<n;i++){
+            left[i]=max(left[i-1],prices[i]-pre);
+            pre=min(pre,prices[i]);
+        }
+        
+        vector<int>  right(n);
+        right[n-1]=0;
+        pre=prices[n-1];
+        for(int i=n-2;i>=0;i--){
+            right[i]=max(right[i+1],pre-prices[i]);
+            pre=max(pre,prices[i]);
+        }
+        int res=0;
+        for(int i=0;i<n;i++){
+            res=max(res,right[i]+left[i]);
+        }
+        return res;
+    }
+};
