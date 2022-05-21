@@ -1,0 +1,24 @@
+#####cooldown 
+
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int n=prices.size();
+        int obsp=-prices[0],ossp=0,ocsp=0;
+        
+        for(int i=1;i<n;i++){
+            int nbsp=0,nssp=0,ncsp=0;
+            
+            nbsp=max(obsp,ocsp-prices[i]);
+            nssp=max(ossp,obsp+prices[i]);
+            ncsp=max(ossp,ocsp);
+            
+            obsp=nbsp;
+            ossp=nssp;
+            ocsp=ncsp;
+            
+        }
+        return ossp;
+    }
+};
